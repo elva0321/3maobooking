@@ -38,6 +38,9 @@
       font-size: 14px; 
       line-height: 1.8;
       margin-bottom: 40px;
+      padding: 15px;
+      background: #f9fafb;
+      border-radius: 10px;
     }
     .form-group { margin-bottom: 25px; }
     label { 
@@ -152,8 +155,8 @@
     <div class="form-container">
       <h2 class="form-title">三毛咖啡訂位</h2>
       <div class="form-info">
-        <div>📞 07-536-5630</div>
-        <div>📍 高雄市苓雅區四維二路146號</div>
+        本店保留訂位十分鐘，請務必準時抵達。<br>
+        用餐時間兩小時，若後續無訂位可繼續用餐。
       </div>
 
       <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
@@ -176,6 +179,8 @@
             <label>🕐 時間</label>
             <select id="time" required>
               <option value="">請選擇時間</option>
+              <option value="10:00">10:00</option>
+              <option value="10:30">10:30</option>
               <option value="11:00">11:00</option>
               <option value="11:30">11:30</option>
               <option value="12:00">12:00</option>
@@ -193,7 +198,6 @@
               <option value="18:00">18:00</option>
               <option value="18:30">18:30</option>
               <option value="19:00">19:00</option>
-              <option value="19:30">19:30</option>
             </select>
           </div>
         </div>
@@ -355,7 +359,6 @@
           })
         });
         
-        // no-cors 模式下無法讀取回應，但如果沒有錯誤就當作成功
         console.log('✅ 訂位已送出（no-cors 模式）');
         console.log('📧 Email 通知將發送到 3maocafe@gmail.com');
         
