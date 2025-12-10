@@ -249,6 +249,7 @@
             <ul>
                 <li>本店保留訂位十分鐘，請務必準時抵達</li>
                 <li>用餐時間兩小時，若後續無訂位可繼續用餐</li>
+                <li><strong>當日訂位請於早上 7:00 前完成</strong></li>
                 <li>如需取消，請來電 <strong>07-5365630</strong></li>
             </ul>
         </div>
@@ -349,11 +350,27 @@
         // API 網址
         const API_URL = 'https://script.google.com/macros/s/AKfycbzl-GPkU8FKCBwGdtdtr1vAbOckj53gMVg_CzfFoWlSE8fxSqBd2DfEA5fRg36NEEcI/exec';
 
-        // 設定最小日期為今天
+        // 設定最小日期（考慮早上7點規則）
         const dateInput = document.getElementById('date');
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-        dateInput.value = today;
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        let minDate;
+        if (currentHour >= 7) {
+            // 早上7點後，最小日期為明天
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            minDate = tomorrow.toISOString().split('T')[0];
+        } else {
+            // 早上7點前，最小日期為今天
+            minDate = now.toISOString().split('T')[0];
+        }
+        
+        dateInput.min = minDate;
+        dateInput.value = minDate;
+
+        console.log('⏰ 當前時間:', currentHour + '時');
+        console.log('📅 最小可選日期:', minDate);
 
         // 更新提醒框
         function updateReminders() {
@@ -396,6 +413,18 @@
             // 檢查總人數
             if (adults + children === 0) {
                 showError('請至少選擇一位成人或幼童！');
+                submitButton.disabled = false;
+                submitButton.textContent = '確認訂位';
+                return;
+            }
+
+            // 檢查早上7點規則
+            const now = new Date();
+            const currentHour = now.getHours();
+            const today = now.toISOString().split('T')[0];
+            
+            if (currentHour >= 7 && date === today) {
+                showError('當日訂位請於早上 7:00 前完成，請選擇其他日期或來電訂位');
                 submitButton.disabled = false;
                 submitButton.textContent = '確認訂位';
                 return;
@@ -454,7 +483,7 @@
                     showSuccess();
                     // 清空表單
                     document.getElementById('bookingForm').reset();
-                    dateInput.value = today;
+                    dateInput.value = minDate;
                     document.getElementById('adults').value = 2;
                     // 隱藏提醒
                     document.getElementById('childrenReminder').style.display = 'none';
@@ -506,4 +535,3 @@
     </script>
 </body>
 </html>
-S
