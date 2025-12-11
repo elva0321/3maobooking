@@ -48,81 +48,46 @@
 
         .notice {
             background: #fff9e6;
-            border-left: 4px solid #333;
+            border: 2px solid #333;
+            border-radius: 10px;
             padding: 15px;
             margin-bottom: 25px;
-            border-radius: 4px;
-            font-size: 14px;
-            line-height: 1.6;
         }
 
-        .notice-title {
-            font-weight: bold;
-            margin-bottom: 8px;
+        .notice h3 {
             color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .notice ul {
             margin-left: 20px;
-            color: #555;
+            color: #666;
         }
 
         .notice li {
             margin-bottom: 5px;
+            line-height: 1.5;
         }
 
-        .notice strong {
-            color: #000;
-        }
-
-        /* 兒童提醒框 - 黃色 */
-        .children-reminder {
-            background: #fff9e6;
-            border: 2px solid #f5c842;
-            border-radius: 8px;
+        .info-section {
+            margin-bottom: 25px;
             padding: 15px;
-            margin-bottom: 20px;
-            display: none;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
         }
 
-        .children-reminder-title {
-            font-weight: bold;
-            color: #856404;
-            margin-bottom: 8px;
+        .info-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .children-reminder-text {
-            color: #856404;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* 寵物提醒框 - 藍色 */
-        .pets-reminder {
-            background: #d9edf7;
-            border: 2px solid #5bc0de;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .pets-reminder-title {
-            font-weight: bold;
-            color: #31708f;
+            justify-content: space-between;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #333;
         }
 
-        .pets-reminder-text {
-            color: #31708f;
-            font-size: 14px;
-            line-height: 1.6;
+        .info-label {
+            font-weight: bold;
         }
 
         .form-group {
@@ -133,146 +98,197 @@
             display: block;
             margin-bottom: 8px;
             color: #333;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
+            border: 2px solid #333;
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            font-family: inherit;
             background: white;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #333;
+            border-color: #000;
         }
 
-        .number-group {
+        .guest-count {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 15px;
         }
 
-        .number-item {
-            position: relative;
-        }
-
-        .number-item label {
+        .guest-item label {
+            text-align: center;
             font-size: 14px;
-            margin-bottom: 5px;
         }
 
-        .number-item input {
-            padding: 10px;
+        .guest-item input {
+            text-align: center;
         }
 
-        button {
+        .warning-box {
+            background: #fff9e6;
+            border: 2px solid #f5c842;
+            border-left: 5px solid #f5c842;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .warning-box h4 {
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .pet-friendly-box {
+            background: #e8f4f8;
+            border: 2px solid #4a90e2;
+            border-left: 5px solid #4a90e2;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .pet-friendly-box h4 {
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pet-friendly-box p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .submit-btn {
             width: 100%;
             padding: 15px;
             background: #333;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 10px;
         }
 
-        button:hover {
+        .submit-btn:hover {
             background: #000;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            background: #999;
+        .submit-btn:disabled {
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
 
-        .success-message, .error-message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+        .loading {
             text-align: center;
+            padding: 20px;
             display: none;
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
+        .loading.active {
+            display: block;
         }
 
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 30px 20px;
+                padding: 20px;
             }
 
             h1 {
-                font-size: 28px;
+                font-size: 24px;
             }
 
             h2 {
-                font-size: 20px;
-            }
-
-            .number-group {
-                grid-template-columns: 1fr;
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🐱 三毛咖啡</h1>
-        <h2>訂位系統</h2>
+        <h1>三毛咖啡</h1>
+        <h2>線上訂位</h2>
 
         <div class="notice">
-            <div class="notice-title">⚠️ 訂位須知</div>
+            <h3>📋 訂位須知</h3>
             <ul>
-                <li>本店保留訂位十分鐘，請務必準時抵達</li>
-                <li>用餐時間兩小時，若後續無訂位可繼續用餐</li>
-                <li><strong>當日訂位請於早上 7:00 前完成</strong></li>
-                <li>如需取消，請來電 <strong>07-5365630</strong></li>
+                <li>每時段限定 15 組訂位</li>
+                <li>訂位保留時間 15 分鐘</li>
+                <li>如需取消請提前來電告知</li>
+                <li>當日訂位請於早上 7:00 前完成</li>
             </ul>
         </div>
 
-        <form id="bookingForm">
+        <div class="info-section">
+            <div class="info-row">
+                <span class="info-label">📞 電話：</span>
+                <span>07-5365630</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📍 地址：</span>
+                <span>高雄市苓雅區四維二路146號</span>
+            </div>
+        </div>
+
+        <form id="bookingForm" method="POST" action="https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec">
+            <input type="hidden" name="action" value="create">
+            <input type="hidden" name="id" id="bookingId">
+
             <div class="form-group">
-                <label for="name">姓名 *</label>
-                <input type="text" id="name" required placeholder="請輸入您的姓名">
+                <label for="name">👤 姓名 *</label>
+                <input type="text" id="name" name="name" required placeholder="請輸入您的姓名">
             </div>
 
             <div class="form-group">
-                <label for="phone">聯絡電話 *</label>
-                <input type="tel" id="phone" required placeholder="0912345678">
+                <label for="phone">📱 電話 *</label>
+                <input type="tel" id="phone" name="phone" required pattern="09[0-9]{8}" placeholder="09xxxxxxxx">
             </div>
 
             <div class="form-group">
-                <label for="date">用餐日期 *</label>
-                <input type="date" id="date" required>
+                <label for="date">📅 日期 *</label>
+                <input type="date" id="date" name="date" required>
             </div>
 
             <div class="form-group">
-                <label for="time">用餐時間 *</label>
-                <select id="time" required>
+                <label for="time">🕐 時間 *</label>
+                <select id="time" name="time" required>
                     <option value="">請選擇時間</option>
                     <option value="10:00">10:00</option>
                     <option value="10:30">10:30</option>
@@ -297,241 +313,146 @@
             </div>
 
             <div class="form-group">
-                <label>人數 *</label>
-                <div class="number-group">
-                    <div class="number-item">
+                <label>👥 人數 *</label>
+                <div class="guest-count">
+                    <div class="guest-item">
                         <label for="adults">成人</label>
-                        <input type="number" id="adults" value="2" min="0" max="20" required onchange="updateReminders()">
+                        <input type="number" id="adults" name="adults" min="1" max="20" value="2" required>
                     </div>
-                    <div class="number-item">
+                    <div class="guest-item">
                         <label for="children">12歲以下幼童</label>
-                        <input type="number" id="children" value="0" min="0" max="20" onchange="updateReminders()">
+                        <input type="number" id="children" name="children" min="0" max="10" value="0">
                     </div>
-                    <div class="number-item">
+                    <div class="guest-item">
                         <label for="pets">寵物</label>
-                        <input type="number" id="pets" value="0" min="0" max="10" onchange="updateReminders()">
+                        <input type="number" id="pets" name="pets" min="0" max="5" value="0">
                     </div>
                 </div>
             </div>
 
-            <!-- 兒童提醒框 -->
-            <div id="childrenReminder" class="children-reminder">
-                <div class="children-reminder-title">
-                    ⚠️ 溫馨提醒
-                </div>
-                <div class="children-reminder-text">
-                    您的訂位包含兒童，到店後需填寫「乖乖保證書」，確保用餐品質與安全。感謝您的配合！
-                </div>
+            <div class="warning-box" id="childrenWarning" style="display: none;">
+                <h4>⚠️ 溫馨提醒</h4>
+                <p>您的訂位包含幼童，到店後需填寫「乖乖保證書」，確保用餐品質與安全。感謝您的配合！</p>
             </div>
 
-            <!-- 寵物提醒框 -->
-            <div id="petsReminder" class="pets-reminder">
-                <div class="pets-reminder-title">
-                    🐾 寵物友善提醒
-                </div>
-                <div class="pets-reminder-text">
-                    有牽繩即可，本店備有水碗。
-                </div>
+            <div class="pet-friendly-box" id="petFriendly" style="display: none;">
+                <h4>🐾 寵物友善提醒</h4>
+                <p>有牽繩即可，本店備有水碗。</p>
             </div>
 
-            <button type="submit">確認訂位</button>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>正在提交訂位...</p>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">確認訂位</button>
         </form>
-
-        <div class="success-message" id="successMessage">
-            ✅ 訂位成功！我們已收到您的訂位，稍後將有專人與您聯繫確認。
-        </div>
-
-        <div class="error-message" id="errorMessage">
-            ❌ 訂位失敗，請稍後再試或直接來電訂位。
-        </div>
     </div>
 
     <script>
-        // API 網址
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec';
+        console.log('✅ 三毛咖啡訂位系統已載入（Form Submit 版本）');
 
-        // 設定最小日期（考慮早上7點規則）
-        const dateInput = document.getElementById('date');
+        // 7:00 AM 規則
         const now = new Date();
         const currentHour = now.getHours();
+        const dateInput = document.getElementById('date');
         
         let minDate;
         if (currentHour >= 7) {
-            // 早上7點後，最小日期為明天
             const tomorrow = new Date(now);
             tomorrow.setDate(tomorrow.getDate() + 1);
             minDate = tomorrow.toISOString().split('T')[0];
+            console.log('⏰ 當前時間超過 7:00，最小日期設為明天');
         } else {
-            // 早上7點前，最小日期為今天
             minDate = now.toISOString().split('T')[0];
+            console.log('⏰ 當前時間在 7:00 前，可以訂今天');
         }
         
         dateInput.min = minDate;
-        dateInput.value = minDate;
-
-        console.log('⏰ 當前時間:', currentHour + '時');
         console.log('📅 最小可選日期:', minDate);
 
-        // 更新提醒框
-        function updateReminders() {
-            const children = parseInt(document.getElementById('children').value) || 0;
-            const pets = parseInt(document.getElementById('pets').value) || 0;
+        // 動態顯示提醒框
+        const childrenInput = document.getElementById('children');
+        const petsInput = document.getElementById('pets');
+        const childrenWarning = document.getElementById('childrenWarning');
+        const petFriendly = document.getElementById('petFriendly');
 
-            // 顯示/隱藏兒童提醒
-            const childrenReminder = document.getElementById('childrenReminder');
-            if (children > 0) {
-                childrenReminder.style.display = 'block';
+        function updateWarnings() {
+            if (parseInt(childrenInput.value) > 0) {
+                childrenWarning.style.display = 'block';
             } else {
-                childrenReminder.style.display = 'none';
+                childrenWarning.style.display = 'none';
             }
 
-            // 顯示/隱藏寵物提醒
-            const petsReminder = document.getElementById('petsReminder');
-            if (pets > 0) {
-                petsReminder.style.display = 'block';
+            if (parseInt(petsInput.value) > 0) {
+                petFriendly.style.display = 'block';
             } else {
-                petsReminder.style.display = 'none';
+                petFriendly.style.display = 'none';
             }
         }
 
-        // 表單送出
-        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+        childrenInput.addEventListener('input', updateWarnings);
+        petsInput.addEventListener('input', updateWarnings);
+
+        // 表單提交處理
+        const form = document.getElementById('bookingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const submitButton = e.target.querySelector('button');
-            submitButton.disabled = true;
-            submitButton.textContent = '送出中...';
+            // 再次檢查 7:00 規則
+            const selectedDate = dateInput.value;
+            const today = new Date().toISOString().split('T')[0];
+            const currentHour = new Date().getHours();
 
-            const name = document.getElementById('name').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            const adults = parseInt(document.getElementById('adults').value);
-            const children = parseInt(document.getElementById('children').value);
-            const pets = parseInt(document.getElementById('pets').value);
-
-            // 檢查總人數
-            if (adults + children === 0) {
-                showError('請至少選擇一位成人或幼童！');
-                submitButton.disabled = false;
-                submitButton.textContent = '確認訂位';
+            if (currentHour >= 7 && selectedDate === today) {
+                alert('當日訂位請於早上 7:00 前完成，請選擇其他日期或來電訂位');
                 return;
             }
 
-            // 檢查早上7點規則
-            const now = new Date();
-            const currentHour = now.getHours();
-            const today = now.toISOString().split('T')[0];
+            // 設置訂位 ID
+            document.getElementById('bookingId').value = Date.now();
+
+            console.log('📤 準備提交訂位表單');
+
+            // 顯示 loading
+            loading.classList.add('active');
+            submitBtn.disabled = true;
+
+            // 提交表單
+            const formData = new FormData(form);
             
-            if (currentHour >= 7 && date === today) {
-                showError('當日訂位請於早上 7:00 前完成，請選擇其他日期或來電訂位');
-                submitButton.disabled = false;
-                submitButton.textContent = '確認訂位';
-                return;
-            }
-
-            // 檢查是否選擇過去的日期
-            const selectedDate = new Date(date);
-            const todayDate = new Date(today);
-            if (selectedDate < todayDate) {
-                showError('不能選擇過去的日期！');
-                submitButton.disabled = false;
-                submitButton.textContent = '確認訂位';
-                return;
-            }
-
-            // 檢查電話格式
-            if (!/^09\d{8}$/.test(phone)) {
-                showError('請輸入正確的手機號碼格式（09開頭的10位數字）');
-                submitButton.disabled = false;
-                submitButton.textContent = '確認訂位';
-                return;
-            }
-
-            const booking = {
-                id: Date.now(),
-                name: name,
-                phone: phone,
-                date: date,
-                time: time,
-                adults: adults,
-                children: children,
-                pets: pets,
-                status: 'pending'
-            };
-
-            console.log('📤 準備發送訂位:', booking);
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'create',
-                        booking: booking
-                    })
-                });
-
-                console.log('📥 收到回應狀態:', response.status);
-                
-                const data = await response.json();
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('📥 收到回應');
+                return response.text();
+            })
+            .then(data => {
                 console.log('📦 回應內容:', data);
-
-                if (data.status === 'success') {
-                    showSuccess();
-                    // 清空表單
-                    document.getElementById('bookingForm').reset();
-                    dateInput.value = minDate;
-                    document.getElementById('adults').value = 2;
-                    // 隱藏提醒
-                    document.getElementById('childrenReminder').style.display = 'none';
-                    document.getElementById('petsReminder').style.display = 'none';
-                } else {
-                    showError(data.message || '訂位失敗，請稍後再試');
-                }
-            } catch (error) {
-                console.error('❌ 請求錯誤:', error);
-                showError('網路連線失敗，請檢查網路後重試');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = '確認訂位';
-            }
+                loading.classList.remove('active');
+                submitBtn.disabled = false;
+                
+                alert('✅ 訂位成功！我們已收到您的訂位，稍後將有專人與您聯繫確認。');
+                form.reset();
+                updateWarnings();
+                
+                // 重置日期限制
+                dateInput.min = minDate;
+            })
+            .catch(error => {
+                console.error('❌ 錯誤:', error);
+                loading.classList.remove('active');
+                submitBtn.disabled = false;
+                alert('❌ 訂位失敗，請稍後再試或直接來電訂位：07-5365630');
+            });
         });
 
-        function showSuccess() {
-            const successMsg = document.getElementById('successMessage');
-            const errorMsg = document.getElementById('errorMessage');
-            
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'block';
-            
-            // 5秒後自動隱藏
-            setTimeout(() => {
-                successMsg.style.display = 'none';
-            }, 5000);
-        }
-
-        function showError(message) {
-            const successMsg = document.getElementById('successMessage');
-            const errorMsg = document.getElementById('errorMessage');
-            
-            successMsg.style.display = 'none';
-            errorMsg.textContent = '❌ ' + message;
-            errorMsg.style.display = 'block';
-            
-            // 5秒後自動隱藏
-            setTimeout(() => {
-                errorMsg.style.display = 'none';
-            }, 5000);
-        }
-
-        // 初始化
-        updateReminders();
-
-        console.log('✅ 三毛咖啡訂位系統已載入');
-        console.log('API:', API_URL);
+        console.log('✅ 表單初始化完成');
     </script>
 </body>
 </html>
