@@ -138,6 +138,11 @@
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
+            display: none;
+        }
+
+        .warning-box.show {
+            display: block;
         }
 
         .warning-box h4 {
@@ -161,6 +166,11 @@
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
+            display: none;
+        }
+
+        .pet-friendly-box.show {
+            display: block;
         }
 
         .pet-friendly-box h4 {
@@ -199,31 +209,6 @@
             background: #ccc;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #333;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 600px) {
@@ -267,7 +252,7 @@
             </div>
         </div>
 
-        <form id="bookingForm" method="POST" action="https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec">
+        <form id="bookingForm" method="POST" action="https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec" onsubmit="return validateForm()">
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="id" id="bookingId">
 
@@ -330,19 +315,14 @@
                 </div>
             </div>
 
-            <div class="warning-box" id="childrenWarning" style="display: none;">
+            <div class="warning-box" id="childrenWarning">
                 <h4>⚠️ 溫馨提醒</h4>
                 <p>您的訂位包含幼童，到店後需填寫「乖乖保證書」，確保用餐品質與安全。感謝您的配合！</p>
             </div>
 
-            <div class="pet-friendly-box" id="petFriendly" style="display: none;">
+            <div class="pet-friendly-box" id="petFriendly">
                 <h4>🐾 寵物友善提醒</h4>
                 <p>有牽繩即可，本店備有水碗。</p>
-            </div>
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>正在提交訂位...</p>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">確認訂位</button>
@@ -350,7 +330,7 @@
     </div>
 
     <script>
-        console.log('✅ 三毛咖啡訂位系統已載入（Form Submit 版本）');
+        console.log('✅ 三毛咖啡訂位系統已載入（真正的 Form Submit 版本）');
 
         // 7:00 AM 規則
         const now = new Date();
@@ -379,29 +359,26 @@
 
         function updateWarnings() {
             if (parseInt(childrenInput.value) > 0) {
-                childrenWarning.style.display = 'block';
+                childrenWarning.classList.add('show');
             } else {
-                childrenWarning.style.display = 'none';
+                childrenWarning.classList.remove('show');
             }
 
             if (parseInt(petsInput.value) > 0) {
-                petFriendly.style.display = 'block';
+                petFriendly.classList.add('show');
             } else {
-                petFriendly.style.display = 'none';
+                petFriendly.classList.remove('show');
             }
         }
 
         childrenInput.addEventListener('input', updateWarnings);
         petsInput.addEventListener('input', updateWarnings);
 
-        // 表單提交處理
-        const form = document.getElementById('bookingForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const loading = document.getElementById('loading');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
+        // 表單驗證（在提交前）
+        function validateForm() {
+            // 設置訂位 ID
+            document.getElementById('bookingId').value = Date.now();
+            
             // 再次檢查 7:00 規則
             const selectedDate = dateInput.value;
             const today = new Date().toISOString().split('T')[0];
@@ -409,50 +386,21 @@
 
             if (currentHour >= 7 && selectedDate === today) {
                 alert('當日訂位請於早上 7:00 前完成，請選擇其他日期或來電訂位');
-                return;
+                return false; // 阻止提交
             }
 
-            // 設置訂位 ID
-            document.getElementById('bookingId').value = Date.now();
-
-            console.log('📤 準備提交訂位表單');
-
-            // 顯示 loading
-            loading.classList.add('active');
-            submitBtn.disabled = true;
-
-            // 提交表單
-            const formData = new FormData(form);
+            console.log('📤 表單通過驗證，準備提交');
             
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                console.log('📥 收到回應');
-                return response.text();
-            })
-            .then(data => {
-                console.log('📦 回應內容:', data);
-                loading.classList.remove('active');
-                submitBtn.disabled = false;
-                
-                alert('✅ 訂位成功！我們已收到您的訂位，稍後將有專人與您聯繫確認。');
-                form.reset();
-                updateWarnings();
-                
-                // 重置日期限制
-                dateInput.min = minDate;
-            })
-            .catch(error => {
-                console.error('❌ 錯誤:', error);
-                loading.classList.remove('active');
-                submitBtn.disabled = false;
-                alert('❌ 訂位失敗，請稍後再試或直接來電訂位：07-5365630');
-            });
-        });
+            // 禁用提交按鈕防止重複提交
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+
+            return true; // 允許表單原生提交
+        }
 
         console.log('✅ 表單初始化完成');
     </script>
 </body>
 </html>
+
