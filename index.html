@@ -116,6 +116,11 @@
             border-color: #000;
         }
 
+        input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
         .guest-count {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -157,6 +162,12 @@
             color: #666;
             line-height: 1.6;
             margin: 0;
+        }
+
+        .holiday-warning {
+            background: #ffe5e5;
+            border: 2px solid #d63031;
+            border-left: 5px solid #d63031;
         }
 
         .pet-friendly-box {
@@ -271,6 +282,11 @@
                 <input type="date" id="date" name="date" required>
             </div>
 
+            <div class="warning-box holiday-warning" id="holidayWarning">
+                <h4>🚫 此日期為公休日</h4>
+                <p id="holidayReason">很抱歉，您選擇的日期為店家公休日，無法接受訂位。請選擇其他日期或來電詢問。</p>
+            </div>
+
             <div class="form-group">
                 <label for="time">🕐 時間 *</label>
                 <select id="time" name="time" required>
@@ -330,7 +346,27 @@
     </div>
 
     <script>
-        console.log('✅ 三毛咖啡訂位系統已載入（真正的 Form Submit 版本）');
+        console.log('✅ 三毛咖啡訂位系統已載入（含公休日檢查）');
+
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec';
+        let holidays = [];
+
+        // 載入公休日列表
+        async function loadHolidays() {
+            try {
+                const response = await fetch(API_URL + '?action=getHolidays');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    holidays = data.data.holidays.map(h => h.date);
+                    console.log('✅ 已載入公休日:', holidays);
+                }
+            } catch(error) {
+                console.error('❌ 載入公休日失敗:', error);
+            }
+        }
+
+        // 頁面載入時獲取公休日
+        loadHolidays();
 
         // 7:00 AM 規則
         const now = new Date();
@@ -350,6 +386,25 @@
         
         dateInput.min = minDate;
         console.log('📅 最小可選日期:', minDate);
+
+        // 檢查選擇的日期是否為公休日
+        dateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+            const holidayWarning = document.getElementById('holidayWarning');
+            const submitBtn = document.getElementById('submitBtn');
+            const timeInput = document.getElementById('time');
+            
+            if (holidays.includes(selectedDate)) {
+                holidayWarning.classList.add('show');
+                submitBtn.disabled = true;
+                timeInput.disabled = true;
+                console.log('🚫 選擇的日期為公休日:', selectedDate);
+            } else {
+                holidayWarning.classList.remove('show');
+                submitBtn.disabled = false;
+                timeInput.disabled = false;
+            }
+        });
 
         // 動態顯示提醒框
         const childrenInput = document.getElementById('children');
@@ -379,14 +434,21 @@
             // 設置訂位 ID
             document.getElementById('bookingId').value = Date.now();
             
-            // 再次檢查 7:00 規則
             const selectedDate = dateInput.value;
+            
+            // 檢查公休日
+            if (holidays.includes(selectedDate)) {
+                alert('此日期為公休日，無法接受訂位。請選擇其他日期。');
+                return false;
+            }
+            
+            // 檢查 7:00 規則
             const today = new Date().toISOString().split('T')[0];
             const currentHour = new Date().getHours();
 
             if (currentHour >= 7 && selectedDate === today) {
                 alert('當日訂位請於早上 7:00 前完成，請選擇其他日期或來電訂位');
-                return false; // 阻止提交
+                return false;
             }
 
             console.log('📤 表單通過驗證，準備提交');
@@ -396,11 +458,10 @@
             submitBtn.disabled = true;
             submitBtn.textContent = '提交中...';
 
-            return true; // 允許表單原生提交
+            return true;
         }
 
         console.log('✅ 表單初始化完成');
     </script>
 </body>
 </html>
-
