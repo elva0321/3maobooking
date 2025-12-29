@@ -222,6 +222,110 @@
             transform: none;
         }
 
+        /* 成功訊息模態框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content h1 {
+            color: #00b894;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-card-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-card-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-card-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .info-card-value {
+            color: #333;
+        }
+
+        .note {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .modal-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .modal-btn:hover {
+            background: #000;
+        }
+
+        /* 隱藏 iframe */
+        #hidden-iframe {
+            display: none;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -233,6 +337,10 @@
 
             h2 {
                 font-size: 18px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -263,7 +371,7 @@
             </div>
         </div>
 
-        <form id="bookingForm" method="POST" action="https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec" onsubmit="return validateForm()">
+        <form id="bookingForm" method="POST" target="hidden-iframe" action="https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec" onsubmit="return handleSubmit()">
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="id" id="bookingId">
 
@@ -345,11 +453,35 @@
         </form>
     </div>
 
+    <!-- 隱藏的 iframe 用於提交表單 -->
+    <iframe name="hidden-iframe" id="hidden-iframe"></iframe>
+
+    <!-- 成功訊息模態框 -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✅</div>
+            <h1>訂位成功！</h1>
+            <p>我們已收到您的訂位，稍後將有專人與您聯繫確認。</p>
+            
+            <div class="info-card" id="bookingInfo">
+                <!-- 將由 JavaScript 填充 -->
+            </div>
+            
+            <div class="note">
+                📞 如需更改或取消訂位，請來電 07-5365630<br>
+                ⏰ 請準時到達，訂位保留 15 分鐘
+            </div>
+            
+            <button class="modal-btn" onclick="closeModal()">繼續訂位</button>
+        </div>
+    </div>
+
     <script>
-        console.log('✅ 三毛咖啡訂位系統已載入（含公休日檢查）');
+        console.log('✅ 三毛咖啡訂位系統已載入（iframe 版本）');
 
         const API_URL = 'https://script.google.com/macros/s/AKfycbyIsXTcapF_T737ZQKOt2r1u-1chtFHPWZERSaDwSyPJu6bhedn4nEShAUBDnXLUDg/exec';
         let holidays = [];
+        let currentBooking = {};
 
         // 載入公休日列表
         async function loadHolidays() {
@@ -365,7 +497,6 @@
             }
         }
 
-        // 頁面載入時獲取公休日
         loadHolidays();
 
         // 7:00 AM 規則
@@ -387,7 +518,7 @@
         dateInput.min = minDate;
         console.log('📅 最小可選日期:', minDate);
 
-        // 檢查選擇的日期是否為公休日
+        // 檢查公休日
         dateInput.addEventListener('change', function() {
             const selectedDate = this.value;
             const holidayWarning = document.getElementById('holidayWarning');
@@ -398,7 +529,6 @@
                 holidayWarning.classList.add('show');
                 submitBtn.disabled = true;
                 timeInput.disabled = true;
-                console.log('🚫 選擇的日期為公休日:', selectedDate);
             } else {
                 holidayWarning.classList.remove('show');
                 submitBtn.disabled = false;
@@ -406,7 +536,7 @@
             }
         });
 
-        // 動態顯示提醒框
+        // 動態提醒
         const childrenInput = document.getElementById('children');
         const petsInput = document.getElementById('pets');
         const childrenWarning = document.getElementById('childrenWarning');
@@ -429,10 +559,10 @@
         childrenInput.addEventListener('input', updateWarnings);
         petsInput.addEventListener('input', updateWarnings);
 
-        // 表單驗證（在提交前）
-        function validateForm() {
-            // 設置訂位 ID
-            document.getElementById('bookingId').value = Date.now();
+        // 處理表單提交
+        function handleSubmit() {
+            const bookingId = Date.now();
+            document.getElementById('bookingId').value = bookingId;
             
             const selectedDate = dateInput.value;
             
@@ -451,14 +581,90 @@
                 return false;
             }
 
-            console.log('📤 表單通過驗證，準備提交');
+            // 保存訂位資訊用於顯示
+            currentBooking = {
+                id: bookingId,
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                adults: parseInt(document.getElementById('adults').value),
+                children: parseInt(document.getElementById('children').value),
+                pets: parseInt(document.getElementById('pets').value)
+            };
+
+            console.log('📤 提交訂位:', currentBooking);
             
-            // 禁用提交按鈕防止重複提交
+            // 禁用按鈕
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = '提交中...';
 
+            // 3秒後顯示成功訊息（給後端處理時間）
+            setTimeout(showSuccessModal, 3000);
+
             return true;
+        }
+
+        // 顯示成功訊息
+        function showSuccessModal() {
+            const bookingInfo = document.getElementById('bookingInfo');
+            
+            bookingInfo.innerHTML = `
+                <div class="info-card-row">
+                    <span class="info-card-label">訂位編號</span>
+                    <span class="info-card-value">#${currentBooking.id}</span>
+                </div>
+                <div class="info-card-row">
+                    <span class="info-card-label">姓名</span>
+                    <span class="info-card-value">${currentBooking.name}</span>
+                </div>
+                <div class="info-card-row">
+                    <span class="info-card-label">電話</span>
+                    <span class="info-card-value">${currentBooking.phone}</span>
+                </div>
+                <div class="info-card-row">
+                    <span class="info-card-label">日期</span>
+                    <span class="info-card-value">${currentBooking.date}</span>
+                </div>
+                <div class="info-card-row">
+                    <span class="info-card-label">時間</span>
+                    <span class="info-card-value">${currentBooking.time}</span>
+                </div>
+                <div class="info-card-row">
+                    <span class="info-card-label">人數</span>
+                    <span class="info-card-value">${currentBooking.adults + currentBooking.children} 位（成人 ${currentBooking.adults}，幼童 ${currentBooking.children}）</span>
+                </div>
+                ${currentBooking.pets > 0 ? `
+                <div class="info-card-row">
+                    <span class="info-card-label">寵物</span>
+                    <span class="info-card-value">${currentBooking.pets} 隻</span>
+                </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('successModal').classList.add('show');
+            
+            console.log('✅ 訂位成功');
+        }
+
+        // 關閉模態框並重置表單
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('show');
+            document.getElementById('bookingForm').reset();
+            
+            // 重新設定最小日期
+            dateInput.min = minDate;
+            
+            // 重置提醒
+            updateWarnings();
+            
+            // 重新啟用按鈕
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '確認訂位';
+            
+            console.log('📝 表單已重置');
         }
 
         console.log('✅ 表單初始化完成');
